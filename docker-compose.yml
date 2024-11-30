@@ -1,0 +1,52 @@
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  # Caddy certs and config
+  caddy-data:
+  caddy-config:
+
+services:
+  web:
+    build: deploy/local
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    networks:
+      - app-network
+    ports:
+      - "80:80" 
+      - "443:443" 
+      - "443:443/udp"
+    volumes:
+      - .:/app
+      - caddy-data:/data
+      - caddy-config:/config
+    post_start:
+      - command: ./deploy/local/post_start.sh
+        working_dir: /app
+        user: www-data
+    tty: true
+
+  db:
+    image: mysql:9.1
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
