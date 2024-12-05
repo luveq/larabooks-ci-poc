@@ -31,7 +31,7 @@ RUN    chown -R $USER:$USER /data/caddy \
     && chown -R $USER:$USER /config/caddy \
     && chown -R :$USER /app \
     && chmod -R 770 /data/caddy /config/caddy /app \
-    && chmod +x deploy/local/post_start.sh
+    && chmod +x docker/local/post_start.sh
 
 # Add additional capability to bind to port 80 and 443
 RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp

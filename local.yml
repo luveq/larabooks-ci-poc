@@ -10,7 +10,9 @@ volumes:
 
 services:
   web:
-    build: deploy/local
+    build:
+      context: .
+      dockerfile: docker/local/Dockerfile
     depends_on:
       db:
         condition: service_healthy
@@ -18,15 +20,15 @@ services:
     networks:
       - app-network
     ports:
-      - "80:80" 
-      - "443:443" 
+      - "80:80"
+      - "443:443"
       - "443:443/udp"
     volumes:
       - .:/app
       - caddy-data:/data
       - caddy-config:/config
     post_start:
-      - command: ./deploy/local/post_start.sh
+      - command: ./docker/local/post_start.sh
         working_dir: /app
         user: www-data
     tty: true
