@@ -20,9 +20,9 @@ services:
     networks:
       - app-network
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - "8080:80"
+      - "8443:443"
+      - "8443:443/udp"
     volumes:
       - .:/app
       - caddy-data:/data
