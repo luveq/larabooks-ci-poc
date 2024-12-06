@@ -28,6 +28,8 @@ services:
         working_dir: /app
         user: www-data
     tty: true
+    environment:
+      - SERVER_NAME=:8080
 
   db:
     image: mysql:9.1
