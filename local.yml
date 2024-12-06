@@ -29,7 +29,7 @@ services:
         user: www-data
     tty: true
     environment:
-      - SERVER_NAME=:8080
+      - SERVER_NAME=:8882
 
   db:
     image: mysql:9.1
